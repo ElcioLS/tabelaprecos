@@ -2,15 +2,16 @@ import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class Tabela extends StatefulWidget {
-  const Tabela({super.key});
+class NovaTabela extends StatefulWidget {
+  const NovaTabela({Key? key}) : super(key: key);
 
   @override
-  State<Tabela> createState() => _TabelaState();
+  State<NovaTabela> createState() => _NovaTabelaState();
 }
 
-class _TabelaState extends State<Tabela> {
+class _NovaTabelaState extends State<NovaTabela> {
   List<List<dynamic>> _data = [];
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -27,24 +28,50 @@ class _TabelaState extends State<Tabela> {
     });
   }
 
+  List<List<dynamic>> _searchData(String query) {
+    return _data.where((row) {
+      return row[0].toString().startsWith(query);
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Center(
           child: Card(
-              margin: EdgeInsets.all(2),
-              child: Text(
-                // _data[0].toString(),
-                'Tabela de Preços',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              )),
+            margin: EdgeInsets.all(2),
+            child: Text(
+              'Tabela de Preços',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _loadCSV(
-            
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Buscar Produto'),
+              content: TextField(
+                controller: _searchController,
+                decoration: const InputDecoration(
+                  labelText: 'Iniciais do Produto',
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    setState(() {
+                      _data = _searchData(_searchController.text);
+                    });
+                  },
+                  child: const Text('Buscar'),
+                ),
+              ],
+            ),
           );
         },
         child: const Icon(Icons.search),
@@ -64,11 +91,6 @@ class _TabelaState extends State<Tabela> {
                   style: const TextStyle(
                       fontSize: 12, fontWeight: FontWeight.bold),
                 ),
-                // title: Text(
-                //   _data[index][1].toString(),
-                //   style: const TextStyle(
-                //       fontSize: 18, fontWeight: FontWeight.bold),
-                // ),
                 trailing: Text(
                   _data[index][1].toString(),
                   style: const TextStyle(
