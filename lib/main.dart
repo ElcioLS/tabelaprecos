@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tabelaprecos/nova_tabela.dart';
+import 'package:tabelaprecos/tabela.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const NovaTabela(),
+      home: const Tabela(),
     );
   }
 }

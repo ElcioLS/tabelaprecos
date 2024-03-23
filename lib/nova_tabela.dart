@@ -34,6 +34,10 @@ class _NovaTabelaState extends State<NovaTabela> {
     }).toList();
   }
 
+  Color _getRowColor(int index) {
+    return index % 2 == 0 ? Colors.blue.shade200 : Colors.blue.shade50;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,7 +88,7 @@ class _NovaTabelaState extends State<NovaTabela> {
           itemBuilder: (_, index) {
             return Card(
               margin: const EdgeInsets.all(3),
-              color: index == 0 ? Colors.red[400] : Colors.blue,
+              color: _getRowColor(index),
               child: ListTile(
                 leading: Text(
                   _data[index][0].toString(),
